@@ -21,7 +21,8 @@ class ClientTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->apiKey = getenv('PC_API_KEY') ?? '';
+        $envKey = getenv('PC_API_KEY');
+        $this->apiKey = $envKey !== false ? $envKey : '';
         if (empty($this->apiKey)) {
             $this->fail('PC_API_KEY environment variable not set');
         }
