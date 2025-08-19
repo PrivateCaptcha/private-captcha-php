@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - '**'
+    paths-ignore:
+    - 'docs/**'
+    - '**.md'
+    - '**/.*.yml'
+    - '.vscode/**'
+    tags-ignore:
+    - '*'
+  schedule:
+    # we want to verify our SDKs on a constant schedule
+    - cron: '0 0 * * *'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.4']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: mbstring, xml, ctype, json, tokenizer
+        coverage: xdebug
+
+    - name: Install dependencies
+      run: make install-dev
+
+    - name: Lint code
+      run: make lint
+
+    - name: Run tests
+      run: make test
+      env:
+        PC_API_KEY: ${{ secrets.PC_API_KEY }}

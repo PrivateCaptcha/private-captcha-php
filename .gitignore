@@ -1,0 +1,5 @@
+.aider*
+
+/vendor/
+/coverage/
+.phpunit.result.cache
