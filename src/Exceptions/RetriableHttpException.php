@@ -14,7 +14,7 @@ class RetriableHttpException extends RetriableException
         if ($message === '') {
             $message = "API returned HTTP status {$statusCode}";
         }
-        
+
         parent::__construct($message);
     }
 }

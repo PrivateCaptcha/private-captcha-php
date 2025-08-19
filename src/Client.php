@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PrivateCaptcha;
 
-use CurlHandle;
 use JsonException;
 use PrivateCaptcha\Exceptions\ApiKeyException;
 use PrivateCaptcha\Exceptions\PrivateCaptchaException;
@@ -21,7 +20,7 @@ class Client
     public const DEFAULT_FORM_FIELD = 'private-captcha-solution';
     public const VERSION = '1.0.0';
     public const MIN_BACKOFF_MILLIS = 250;
-    
+
     private const STRICT_ARRAY_SEARCH = true;
     private const JSON_DECODE_MAX_DEPTH = 512;
 
@@ -48,14 +47,14 @@ class Client
         }
 
         $domain = $domain ?? self::GLOBAL_DOMAIN;
-        
+
         // Remove https:// or http:// prefix
         if (str_starts_with($domain, 'https://')) {
             $domain = substr($domain, 8);
         } elseif (str_starts_with($domain, 'http://')) {
             $domain = substr($domain, 7);
         }
-        
+
         $domain = rtrim($domain, '/');
 
         $this->endpoint = "https://{$domain}/verify";
@@ -68,7 +67,7 @@ class Client
     private function doVerify(string $solution): array
     {
         $curl = curl_init();
-        
+
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->endpoint,
             CURLOPT_RETURNTRANSFER => true,
@@ -88,7 +87,7 @@ class Client
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $error = curl_error($curl);
-        
+
         curl_close($curl);
 
         if ($response === false || $error !== '') {
@@ -97,7 +96,7 @@ class Client
 
         // At this point we know $response is string, not false
         assert(is_string($response));
-        
+
         $headers = substr($response, 0, $headerSize);
         $body = substr($response, $headerSize);
 
@@ -155,7 +154,7 @@ class Client
         for ($i = 0; $i < $attempts; $i++) {
             if ($i > 0) {
                 $sleepDuration = $currentBackoff;
-                
+
                 if ($lastException instanceof RetriableHttpException && $lastException->retryAfter > 0) {
                     $sleepDuration = max($sleepDuration, (float) $lastException->retryAfter);
                 }
@@ -166,7 +165,7 @@ class Client
 
             try {
                 [$responseData, $traceId] = $this->doVerify($solution);
-                
+
                 return VerifyOutput::fromArray(
                     $responseData,
                     requestId: $traceId,
@@ -191,13 +190,13 @@ class Client
     public function verifyRequest(array $formData): void
     {
         $solution = $formData[$this->formField] ?? null;
-        
+
         if (!is_string($solution)) {
             throw new SolutionException('Solution not found in form data');
         }
-        
+
         $output = $this->verify($solution);
-        
+
         if (!$output->success) {
             throw new SolutionException("Captcha verification failed: {$output}");
         }
@@ -208,7 +207,7 @@ class Client
         $headerLines = explode("\r\n", $headers);
         $searchHeader = strtolower($headerName) . ':';
         $searchHeaderLength = strlen($searchHeader);
-        
+
         foreach ($headerLines as $line) {
             $line = trim($line);
             if (stripos($line, $searchHeader) === 0) {
@@ -216,7 +215,7 @@ class Client
                 return trim($value) ?: null;
             }
         }
-        
+
         return null;
     }
 }

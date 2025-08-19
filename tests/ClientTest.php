@@ -15,7 +15,7 @@ class ClientTest extends TestCase
 {
     private const SOLUTIONS_COUNT = 16;
     private const SOLUTION_LENGTH = 8;
-    
+
     private static ?string $cachedPuzzle = null;
     private string $apiKey;
 
@@ -35,7 +35,7 @@ class ClientTest extends TestCase
         }
 
         $puzzleUrl = 'https://api.privatecaptcha.com/puzzle?sitekey=aaaaaaaabbbbccccddddeeeeeeeeeeee';
-        
+
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $puzzleUrl,
@@ -56,7 +56,7 @@ class ClientTest extends TestCase
 
         // At this point we know $response is string, not false
         assert(is_string($response));
-        
+
         self::$cachedPuzzle = $response;
         return $response;
     }
@@ -114,7 +114,7 @@ class ClientTest extends TestCase
 
         // This should fail after multiple attempts
         $this->expectException(VerificationFailedException::class);
-        
+
         try {
             $client->verify(solution: 'asdf', maxBackoffSeconds: 1, attempts: 4);
         } catch (VerificationFailedException $e) {
@@ -144,7 +144,7 @@ class ClientTest extends TestCase
 
         // This should not raise an exception for test property (it's considered "success")
         $client->verifyRequest($formData);
-        
+
         // If we reach here, the test passed
         $this->assertTrue(true);
     }
@@ -175,7 +175,7 @@ class ClientTest extends TestCase
 
         // Should work with custom form field
         $client->verifyRequest($formData);
-        
+
         // Test that default client fails with custom field data
         $defaultClient = new Client($this->apiKey);
         $this->expectException(SolutionException::class);
