@@ -3,7 +3,7 @@
     "description": "PHP client for server-side usage of Private Captcha API",
     "type": "library",
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-curl": "*",
         "ext-json": "*"
     },
