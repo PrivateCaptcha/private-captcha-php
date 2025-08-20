@@ -38,7 +38,7 @@ clean:
 	rm -f .phpunit.result.cache
 
 # Validate composer.json and check for security issues
-build: clean
+validate: clean
 	$(COMPOSER) validate --strict
 	$(COMPOSER) audit
 
