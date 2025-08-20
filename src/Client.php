@@ -18,7 +18,7 @@ class Client
     public const GLOBAL_DOMAIN = 'api.privatecaptcha.com';
     public const EU_DOMAIN = 'api.eu.privatecaptcha.com';
     public const DEFAULT_FORM_FIELD = 'private-captcha-solution';
-    public const VERSION = '1.0.0';
+    public const VERSION = '0.0.1';
     public const MIN_BACKOFF_MILLIS = 250;
 
     private const STRICT_ARRAY_SEARCH = true;
