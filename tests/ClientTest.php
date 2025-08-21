@@ -132,6 +132,8 @@ class ClientTest extends TestCase
 
     public function testVerifyRequestSuccess(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $puzzle = $this->fetchTestPuzzle();
         $client = new Client($this->apiKey);
 
@@ -144,9 +146,6 @@ class ClientTest extends TestCase
 
         // This should not raise an exception for test property (it's considered "success")
         $client->verifyRequest($formData);
-
-        // If we reach here, the test passed
-        $this->assertTrue(true);
     }
 
     public function testVerifyRequestFailure(): void
