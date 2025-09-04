@@ -90,6 +90,7 @@ class ClientTest extends TestCase
         $payload = $solutionsStr . '.' . $puzzle;
 
         $this->expectException(HttpException::class);
+
         try {
             $client->verify($payload);
         } catch (HttpException $e) {
@@ -159,8 +160,10 @@ class ClientTest extends TestCase
         $formData = [Client::DEFAULT_FORM_FIELD => 'invalid-solution'];
 
         $this->expectException(HttpException::class);
+
         try {
             $client->verifyRequest($formData);
+            // @phpstan-ignore-next-line
         } catch (HttpException $e) {
             $this->assertEquals(400, $e->statusCode);
             throw $e;
