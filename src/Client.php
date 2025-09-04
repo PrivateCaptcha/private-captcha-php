@@ -35,6 +35,7 @@ class Client
     ];
 
     private readonly string $endpoint;
+    private readonly string $domain;
 
     public function __construct(
         private readonly string $apiKey,
@@ -57,7 +58,13 @@ class Client
 
         $domain = rtrim($domain, '/');
 
+        $this->domain = $domain;
         $this->endpoint = "https://{$domain}/verify";
+    }
+
+    public function getDomain(): string
+    {
+        return $this->domain;
     }
 
     /**
