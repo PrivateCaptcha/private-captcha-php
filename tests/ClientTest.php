@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use PrivateCaptcha\Client;
 use PrivateCaptcha\Enums\VerifyCode;
 use PrivateCaptcha\Exceptions\ApiKeyException;
+use PrivateCaptcha\Exceptions\HttpException;
 use PrivateCaptcha\Exceptions\SolutionException;
 use PrivateCaptcha\Exceptions\VerificationFailedException;
 
@@ -88,11 +89,13 @@ class ClientTest extends TestCase
         $solutionsStr = base64_encode($malformedSolutionsBytes);
         $payload = $solutionsStr . '.' . $puzzle;
 
-        $output = $client->verify($payload);
-
-        // Should fail with parse response error
-        $this->assertFalse($output->success);
-        $this->assertEquals(VerifyCode::PARSE_RESPONSE_ERROR, $output->code);
+        $this->expectException(HttpException::class);
+        try {
+            $client->verify($payload);
+        } catch (HttpException $e) {
+            $this->assertEquals(400, $e->statusCode);
+            throw $e;
+        }
     }
 
     public function testVerifyEmptySolution(): void
@@ -155,8 +158,13 @@ class ClientTest extends TestCase
         // Test with malformed data
         $formData = [Client::DEFAULT_FORM_FIELD => 'invalid-solution'];
 
-        $this->expectException(SolutionException::class);
-        $client->verifyRequest($formData);
+        $this->expectException(HttpException::class);
+        try {
+            $client->verifyRequest($formData);
+        } catch (HttpException $e) {
+            $this->assertEquals(400, $e->statusCode);
+            throw $e;
+        }
     }
 
     public function testCustomFormField(): void

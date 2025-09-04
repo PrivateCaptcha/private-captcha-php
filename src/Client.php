@@ -11,6 +11,7 @@ use PrivateCaptcha\Exceptions\RetriableException;
 use PrivateCaptcha\Exceptions\RetriableHttpException;
 use PrivateCaptcha\Exceptions\SolutionException;
 use PrivateCaptcha\Exceptions\VerificationFailedException;
+use PrivateCaptcha\Exceptions\HttpException;
 use PrivateCaptcha\Models\VerifyOutput;
 
 class Client
@@ -18,7 +19,7 @@ class Client
     public const GLOBAL_DOMAIN = 'api.privatecaptcha.com';
     public const EU_DOMAIN = 'api.eu.privatecaptcha.com';
     public const DEFAULT_FORM_FIELD = 'private-captcha-solution';
-    public const VERSION = '0.0.3';
+    public const VERSION = '0.0.4';
     public const MIN_BACKOFF_MILLIS = 250;
 
     private const STRICT_ARRAY_SEARCH = true;
@@ -119,7 +120,7 @@ class Client
         }
 
         if ($httpCode >= 400) {
-            throw new PrivateCaptchaException("HTTP error {$httpCode}");
+            throw new HttpException($httpCode);
         }
 
         try {
