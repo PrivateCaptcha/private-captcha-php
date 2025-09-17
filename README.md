@@ -1,6 +1,6 @@
-# private-captcha-php
+# PHP client for server-side verification of Private Captcha solutions
 
-PHP client for server-side verification of Private Captcha solutions.
+![CI](https://github.com/PrivateCaptcha/private-captcha-php/actions/workflows/ci.yml/badge.svg)
 
 ## Installation
 
