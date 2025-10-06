@@ -1,7 +1,7 @@
 # PHP client for server-side verification of Private Captcha solutions
 
 ![CI](https://github.com/PrivateCaptcha/private-captcha-php/actions/workflows/ci.yml/badge.svg)
-![Packagist Version](https://img.shields.io/packagist/v/private-captcha/private-captcha-php)
+[![Packagist Version](https://img.shields.io/packagist/v/private-captcha/private-captcha-php)](https://packagist.org/packages/private-captcha/private-captcha-php)
 
 ## Installation
 
