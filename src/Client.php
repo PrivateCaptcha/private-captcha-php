@@ -35,15 +35,21 @@ class Client
         425, // Too Early
     ];
 
-    private readonly string $endpoint;
-    private readonly string $domain;
+    private string $endpoint;
+    private string $domain;
+    private string $apiKey;
+    public string $formField;
+    private ?float $timeout;
 
     public function __construct(
-        private readonly string $apiKey,
+        string $apiKey,
         ?string $domain = null,
-        public readonly string $formField = self::DEFAULT_FORM_FIELD,
-        private readonly ?float $timeout = null,
+        string $formField = self::DEFAULT_FORM_FIELD,
+        ?float $timeout = null,
     ) {
+        $this->apiKey = $apiKey;
+        $this->formField = $formField;
+        $this->timeout = $timeout;
         if (empty($this->apiKey)) {
             throw new ApiKeyException('API key is empty');
         }

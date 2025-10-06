@@ -6,10 +6,14 @@ namespace PrivateCaptcha\Exceptions;
 
 class HttpException extends PrivateCaptchaException
 {
+    public int $statusCode;
+
     public function __construct(
-        public readonly int $statusCode,
+        int $statusCode,
         string $message = '',
     ) {
+        $this->statusCode = $statusCode;
+        
         if ($message === '') {
             $message = "API returned HTTP status {$statusCode}";
         }

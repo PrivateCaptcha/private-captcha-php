@@ -6,10 +6,13 @@ namespace PrivateCaptcha\Exceptions;
 
 class VerificationFailedException extends PrivateCaptchaException
 {
+    public int $attempts;
+
     public function __construct(
         string $message,
-        public readonly int $attempts,
+        int $attempts,
     ) {
+        $this->attempts = $attempts;
         parent::__construct($message);
     }
 }

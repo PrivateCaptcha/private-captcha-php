@@ -6,7 +6,7 @@ namespace PrivateCaptcha\Models;
 
 use PrivateCaptcha\Enums\VerifyCode;
 
-readonly class VerifyOutput
+class VerifyOutput
 {
     public function __construct(
         public bool $success,

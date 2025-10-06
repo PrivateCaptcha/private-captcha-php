@@ -6,11 +6,17 @@ namespace PrivateCaptcha\Exceptions;
 
 class RetriableHttpException extends RetriableException
 {
+    public int $statusCode;
+    public int $retryAfter;
+
     public function __construct(
-        public readonly int $statusCode,
-        public readonly int $retryAfter = 0,
+        int $statusCode,
+        int $retryAfter = 0,
         string $message = '',
     ) {
+        $this->statusCode = $statusCode;
+        $this->retryAfter = $retryAfter;
+        
         if ($message === '') {
             $message = "API returned HTTP status {$statusCode}";
         }
