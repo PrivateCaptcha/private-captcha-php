@@ -39,13 +39,13 @@ class Client
     private string $domain;
     private string $apiKey;
     public string $formField;
-    private ?float $timeout;
+    private ?int $timeout;
 
     public function __construct(
         string $apiKey,
         ?string $domain = null,
         string $formField = self::DEFAULT_FORM_FIELD,
-        ?float $timeout = null,
+        ?int $timeout = null,
     ) {
         $this->apiKey = $apiKey;
         $this->formField = $formField;
@@ -81,6 +81,9 @@ class Client
     private function doVerify(string $solution): array
     {
         $curl = curl_init();
+
+        // this is just for PHP static analyzer to shut up
+        assert($this->endpoint !== '');
 
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->endpoint,

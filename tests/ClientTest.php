@@ -113,7 +113,7 @@ class ClientTest extends TestCase
         $client = new Client(
             apiKey: $this->apiKey,
             domain: '192.0.2.1:9999', // Test IP that should be unreachable
-            timeout: 1.0,
+            timeout: 1,
         );
 
         // This should fail after multiple attempts

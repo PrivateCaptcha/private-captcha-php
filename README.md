@@ -115,7 +115,7 @@ $client = new Client(
     apiKey: "your-api-key",
     domain: Client::EU_DOMAIN,                      // replace domain for self-hosting or EU isolation
     formField: "private-captcha-solution",          // custom form field name
-    timeout: 10.0,                                  // request timeout in seconds
+    timeout: 10,                                  // request timeout in seconds
 );
 ```
 
