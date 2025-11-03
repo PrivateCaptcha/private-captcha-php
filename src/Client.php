@@ -117,6 +117,9 @@ class Client
         $headers = substr($response, 0, $headerSize);
         $body = substr($response, $headerSize);
 
+        // Extract trace ID from headers
+        $traceId = $this->extractHeaderValue($headers, 'X-Trace-ID');
+
         if (in_array($httpCode, self::RETRIABLE_STATUS_CODES, self::STRICT_ARRAY_SEARCH)) {
             $retryAfter = 0;
             if ($httpCode === 429) {
@@ -129,7 +132,7 @@ class Client
         }
 
         if ($httpCode >= 400) {
-            throw new HttpException($httpCode);
+            throw new HttpException($httpCode, $traceId);
         }
 
         try {
@@ -137,9 +140,6 @@ class Client
         } catch (JsonException $e) {
             throw new RetriableException("Invalid JSON response: {$e->getMessage()}");
         }
-
-        // Extract trace ID from headers
-        $traceId = $this->extractHeaderValue($headers, 'X-Trace-ID');
 
         return [$data, $traceId];
     }
