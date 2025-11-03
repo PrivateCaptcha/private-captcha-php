@@ -194,9 +194,15 @@ class Client
             }
         }
 
+        $traceId = null;
+        if ($lastException instanceof RetriableHttpException) {
+            $traceId = $lastException->traceId;
+        }
+
         throw new VerificationFailedException(
             "Failed to verify solution after {$attempts} attempts",
             $attempts,
+            $traceId,
         );
     }
 
