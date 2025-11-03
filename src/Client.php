@@ -128,7 +128,7 @@ class Client
                     $retryAfter = (int) $retryAfterValue;
                 }
             }
-            throw new RetriableHttpException($httpCode, $retryAfter);
+            throw new RetriableHttpException($httpCode, $retryAfter, $traceId);
         }
 
         if ($httpCode >= 400) {
