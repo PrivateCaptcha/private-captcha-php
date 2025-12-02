@@ -78,23 +78,29 @@ class Client
      * @return array{0: array<string, mixed>, 1: ?string}
      * @throws RetriableException|RetriableHttpException
      */
-    private function doVerify(string $solution): array
+    private function doVerify(string $solution, ?string $sitekey = null): array
     {
         $curl = curl_init();
 
         // this is just for PHP static analyzer to shut up
         assert($this->endpoint !== '');
 
+        $headers = [
+            'X-Api-Key: ' . $this->apiKey,
+            'Content-Type: text/plain',
+            'User-Agent: private-captcha-php/' . self::VERSION,
+        ];
+
+        if ($sitekey !== null) {
+            $headers[] = 'X-PC-Sitekey: ' . $sitekey;
+        }
+
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->endpoint,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $solution,
-            CURLOPT_HTTPHEADER => [
-                'X-Api-Key: ' . $this->apiKey,
-                'Content-Type: text/plain',
-                'User-Agent: private-captcha-php/' . self::VERSION,
-            ],
+            CURLOPT_HTTPHEADER => $headers,
             CURLOPT_HEADER => true,
             CURLOPT_TIMEOUT => $this->timeout ?? 30,
             CURLOPT_FOLLOWLOCATION => true,
@@ -148,6 +154,7 @@ class Client
         string $solution,
         int $maxBackoffSeconds = 20,
         int $attempts = 5,
+        ?string $sitekey = null,
     ): VerifyOutput {
         if (empty($solution)) {
             throw new SolutionException('Solution is empty');
@@ -181,7 +188,7 @@ class Client
             }
 
             try {
-                [$responseData, $traceId] = $this->doVerify($solution);
+                [$responseData, $traceId] = $this->doVerify($solution, $sitekey);
 
                 return VerifyOutput::fromArray(
                     $responseData,
