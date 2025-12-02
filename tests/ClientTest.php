@@ -137,8 +137,6 @@ class ClientTest extends TestCase
 
     public function testVerifyRequestSuccess(): void
     {
-        $this->expectNotToPerformAssertions();
-
         $puzzle = $this->fetchTestPuzzle();
         $client = new Client($this->apiKey);
 
@@ -149,8 +147,16 @@ class ClientTest extends TestCase
 
         $formData = [Client::DEFAULT_FORM_FIELD => $payload];
 
-        // This should not raise an exception for test property (it's considered "success")
-        $client->verifyRequest($formData);
+        // This should now throw SolutionException because isOK() returns false for TEST_PROPERTY_ERROR
+        $this->expectException(SolutionException::class);
+
+        try {
+            $client->verifyRequest($formData);
+        } catch (SolutionException $e) {
+            // Verify the error message contains the TEST_PROPERTY_ERROR string value
+            $this->assertStringContainsString('property-test', $e->getMessage());
+            throw $e;
+        }
     }
 
     public function testVerifyRequestFailure(): void
@@ -184,8 +190,16 @@ class ClientTest extends TestCase
         // Should look for the custom field name
         $formData = [$customFormField => $payload];
 
-        // Should work with custom form field
-        $client->verifyRequest($formData);
+        // Should now throw SolutionException because isOK() returns false for TEST_PROPERTY_ERROR
+        $this->expectException(SolutionException::class);
+
+        try {
+            $client->verifyRequest($formData);
+        } catch (SolutionException $e) {
+            // Verify the error message contains the TEST_PROPERTY_ERROR string value
+            $this->assertStringContainsString('property-test', $e->getMessage());
+            throw $e;
+        }
 
         // Test that default client fails with custom field data
         $defaultClient = new Client($this->apiKey);
