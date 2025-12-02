@@ -18,6 +18,11 @@ class VerifyOutput
     ) {
     }
 
+    public function isOK(): bool
+    {
+        return $this->success && ($this->code === VerifyCode::NO_ERROR);
+    }
+
     public function getRequestId(): ?string
     {
         return $this->requestId;

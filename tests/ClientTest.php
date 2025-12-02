@@ -75,6 +75,7 @@ class ClientTest extends TestCase
         $output = $client->verify($payload);
 
         // Should succeed but indicate test property error
+        $this->assertFalse($output->isOK());
         $this->assertTrue($output->success);
         $this->assertEquals(VerifyCode::TEST_PROPERTY_ERROR, $output->code);
     }
