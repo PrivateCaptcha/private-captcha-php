@@ -22,7 +22,7 @@ $client = new Client(apiKey: "your-api-key-here");
 // Verify a captcha solution
 try {
     $result = $client->verify(solution: "user-solution-from-frontend");
-    if ($result->success) {
+    if ($result->isOK()) {
         echo "Captcha verified successfully!";
     } else {
         echo "Verification failed: {$result}";
