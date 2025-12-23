@@ -18,6 +18,7 @@ enum VerifyCode: int
     case MAINTENANCE_MODE_ERROR = 9;
     case TEST_PROPERTY_ERROR = 10;
     case INTEGRITY_ERROR = 11;
+    case ORG_SCOPE_ERROR = 12;
 
     public function toString(): string
     {
@@ -34,6 +35,7 @@ enum VerifyCode: int
             self::MAINTENANCE_MODE_ERROR => 'maintenance-mode',
             self::TEST_PROPERTY_ERROR => 'property-test',
             self::INTEGRITY_ERROR => 'integrity-error',
+            self::ORG_SCOPE_ERROR => 'org-scope-error',
         };
     }
 
