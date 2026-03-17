@@ -215,9 +215,10 @@ class Client
 
     /**
      * @param array<string, mixed> $formData
+     * @param ?string $sitekey
      * @throws SolutionException
      */
-    public function verifyRequest(array $formData): void
+    public function verifyRequest(array $formData, ?string $sitekey = null): void
     {
         $solution = $formData[$this->formField] ?? null;
 
@@ -225,7 +226,7 @@ class Client
             throw new SolutionException('Solution not found in form data');
         }
 
-        $output = $this->verify($solution);
+        $output = $this->verify($solution, sitekey: $sitekey);
 
         if (!$output->isOK()) {
             throw new SolutionException("Captcha verification failed: {$output}");

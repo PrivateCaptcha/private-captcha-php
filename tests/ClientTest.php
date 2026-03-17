@@ -16,6 +16,7 @@ class ClientTest extends TestCase
 {
     private const SOLUTIONS_COUNT = 16;
     private const SOLUTION_LENGTH = 8;
+    private const TEST_SITEKEY = 'aaaaaaaabbbbccccddddeeeeeeeeeeee';
 
     private static ?string $cachedPuzzle = null;
     private string $apiKey;
@@ -35,7 +36,7 @@ class ClientTest extends TestCase
             return self::$cachedPuzzle;
         }
 
-        $puzzleUrl = 'https://api.privatecaptcha.com/puzzle?sitekey=aaaaaaaabbbbccccddddeeeeeeeeeeee';
+        $puzzleUrl = 'https://api.privatecaptcha.com/puzzle?sitekey=' + self::TEST_SITEKEY;
 
         $curl = curl_init();
         curl_setopt_array($curl, [
@@ -72,7 +73,7 @@ class ClientTest extends TestCase
         $solutionsStr = base64_encode($emptySolutionsBytes);
         $payload = $solutionsStr . '.' . $puzzle;
 
-        $output = $client->verify($payload);
+        $output = $client->verify($payload, sitekey: self::TEST_SITEKEY);
 
         // Should succeed but indicate test property error
         $this->assertFalse($output->isOK());
@@ -93,7 +94,7 @@ class ClientTest extends TestCase
         $this->expectException(HttpException::class);
 
         try {
-            $client->verify($payload);
+            $client->verify($payload, sitekey: self::TEST_SITEKEY);
         } catch (HttpException $e) {
             $this->assertEquals(400, $e->statusCode);
             throw $e;
@@ -121,7 +122,7 @@ class ClientTest extends TestCase
         $this->expectException(VerificationFailedException::class);
 
         try {
-            $client->verify(solution: 'asdf', maxBackoffSeconds: 1, attempts: 4);
+            $client->verify(solution: 'asdf', maxBackoffSeconds: 1, attempts: 4, sitekey: self::TEST_SITEKEY);
         } catch (VerificationFailedException $e) {
             // Should have failed after 4 attempts
             $this->assertEquals(4, $e->attempts);
@@ -151,7 +152,7 @@ class ClientTest extends TestCase
         $this->expectException(SolutionException::class);
 
         try {
-            $client->verifyRequest($formData);
+            $client->verifyRequest($formData, sitekey: self::TEST_SITEKEY);
         } catch (SolutionException $e) {
             // Verify the error message contains the TEST_PROPERTY_ERROR string value
             $this->assertStringContainsString('property-test', $e->getMessage());
@@ -169,7 +170,7 @@ class ClientTest extends TestCase
         $this->expectException(HttpException::class);
 
         try {
-            $client->verifyRequest($formData);
+            $client->verifyRequest($formData, sitekey: self::TEST_SITEKEY);
             // @phpstan-ignore-next-line
         } catch (HttpException $e) {
             $this->assertEquals(400, $e->statusCode);
@@ -194,7 +195,7 @@ class ClientTest extends TestCase
         $this->expectException(SolutionException::class);
 
         try {
-            $client->verifyRequest($formData);
+            $client->verifyRequest($formData, sitekey: self::TEST_SITEKEY);
         } catch (SolutionException $e) {
             // Verify the error message contains the TEST_PROPERTY_ERROR string value
             $this->assertStringContainsString('property-test', $e->getMessage());
@@ -204,7 +205,7 @@ class ClientTest extends TestCase
         // Test that default client fails with custom field data
         $defaultClient = new Client($this->apiKey);
         $this->expectException(SolutionException::class);
-        $defaultClient->verifyRequest($formData);
+        $defaultClient->verifyRequest($formData, sitekey: self::TEST_SITEKEY);
     }
 
     public function testEUDomain(): void
