@@ -36,7 +36,7 @@ class ClientTest extends TestCase
             return self::$cachedPuzzle;
         }
 
-        $puzzleUrl = 'https://api.privatecaptcha.com/puzzle?sitekey=' + self::TEST_SITEKEY;
+        $puzzleUrl = "https://api.privatecaptcha.com/puzzle?sitekey={self::TEST_SITEKEY}";
 
         $curl = curl_init();
         curl_setopt_array($curl, [
