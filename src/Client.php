@@ -6,12 +6,11 @@ namespace PrivateCaptcha;
 
 use JsonException;
 use PrivateCaptcha\Exceptions\ApiKeyException;
-use PrivateCaptcha\Exceptions\PrivateCaptchaException;
+use PrivateCaptcha\Exceptions\HttpException;
 use PrivateCaptcha\Exceptions\RetriableException;
 use PrivateCaptcha\Exceptions\RetriableHttpException;
 use PrivateCaptcha\Exceptions\SolutionException;
 use PrivateCaptcha\Exceptions\VerificationFailedException;
-use PrivateCaptcha\Exceptions\HttpException;
 use PrivateCaptcha\Models\VerifyOutput;
 
 class Client
@@ -110,8 +109,6 @@ class Client
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $error = curl_error($curl);
-
-        curl_close($curl);
 
         if ($response === false || $error !== '') {
             throw new RetriableException("cURL error: {$error}");

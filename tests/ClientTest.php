@@ -50,8 +50,6 @@ class ClientTest extends TestCase
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $error = curl_error($curl);
-        curl_close($curl);
-
         if ($response === false || $error !== '' || $httpCode !== 200) {
             $this->fail("Failed to fetch test puzzle: HTTP {$httpCode}, cURL error: {$error}");
         }
