@@ -13,6 +13,7 @@ class VerifyOutput
         public VerifyCode $code,
         public ?string $origin = null,
         public ?string $timestamp = null,
+        public ?string $edge_token = null,
         private ?string $requestId = null,
         private ?int $attempt = null,
     ) {
@@ -48,6 +49,7 @@ class VerifyOutput
             code: VerifyCode::tryFrom($data['code'] ?? VerifyCode::ERROR_OTHER->value) ?? VerifyCode::ERROR_OTHER,
             origin: $data['origin'] ?? null,
             timestamp: $data['timestamp'] ?? null,
+            edge_token: $data['edge_token'] ?? null,
             requestId: $requestId,
             attempt: $attempt,
         );

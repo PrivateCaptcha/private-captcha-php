@@ -19,6 +19,7 @@ enum VerifyCode: int
     case TEST_PROPERTY_ERROR = 10;
     case INTEGRITY_ERROR = 11;
     case ORG_SCOPE_ERROR = 12;
+    case SOLUTION_TIMING_ERROR = 13;
 
     public function toString(): string
     {
@@ -36,7 +37,7 @@ enum VerifyCode: int
             self::TEST_PROPERTY_ERROR => 'property-test',
             self::INTEGRITY_ERROR => 'integrity-error',
             self::ORG_SCOPE_ERROR => 'org-scope-error',
+            self::SOLUTION_TIMING_ERROR => 'solution-timing',
         };
     }
-
 }
